@@ -17,7 +17,8 @@ class FlashChat extends StatelessWidget {
   Widget build(BuildContext context) {
     Firebase.initializeApp();
     return MaterialApp(
-
+      // github Test
+      // github Test
       initialRoute:WelcomeScreen.id,
       routes: {
         WelcomeScreen.id: (context) => WelcomeScreen(),
