@@ -74,8 +74,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   FlatButton(
                     onPressed: () {
                       messageTextController.clear();
-                      _firestore.collection('messages').add(
-                          {'text': messageText, 'sender': loggedInUser.email, 'timeStamp':Timestamp.now()});
+                      _firestore.collection('messages').add({
+                        'text': messageText,
+                        'sender': loggedInUser.email,
+                        'timeStamp': Timestamp.now()
+                      });
                     },
                     child: Text(
                       'Send',
@@ -96,8 +99,10 @@ class MessageStream extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
-      stream:
-      _firestore.collection('messages').orderBy('timeStamp', descending: true).snapshots(),
+      stream: _firestore
+          .collection('messages')
+          .orderBy('timeStamp', descending: true)
+          .snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(
@@ -114,17 +119,17 @@ class MessageStream extends StatelessWidget {
 
           final currentUser = loggedInUser.email;
 
-          final messageBubble =
-          MessageBubble(text: messageText,
+          final messageBubble = MessageBubble(
+            text: messageText,
             sender: messageSender,
-            isMe: currentUser == messageSender,);
+            isMe: currentUser == messageSender,
+          );
 
           messageBubbles.add(messageBubble);
         }
         return Expanded(
           child: ListView(
-            padding:
-            EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
+            padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 20.0),
             children: messageBubbles,
           ),
         );
@@ -145,27 +150,31 @@ class MessageBubble extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(10.0),
       child: Column(
-        crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment
-            .start,
+        crossAxisAlignment:
+            isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Text(sender,
+          Text(
+            sender,
             style: TextStyle(
               fontSize: 12.0,
               color: Colors.black54,
-            ),),
+            ),
+          ),
           Material(
-            borderRadius: isMe ? BorderRadius.only(
-                topLeft: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0)) : BorderRadius.only(
-                topRight: Radius.circular(30.0),
-                bottomLeft: Radius.circular(30.0),
-                bottomRight: Radius.circular(30.0)),
+            borderRadius: isMe
+                ? BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0))
+                : BorderRadius.only(
+                    topRight: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0)),
             elevation: 5.0,
             color: isMe ? Colors.lightBlueAccent : Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 10.0, horizontal: 20.0),
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
               child: Text(
                 text,
                 style: TextStyle(
